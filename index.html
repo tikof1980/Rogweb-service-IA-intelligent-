@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROGWEB AI - WaMarket IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+:root {
+  --primary: #6366f1; --secondary: #ec4899;
+  --gold: #fbbf24; --dark: #0a0e27; --darker: #050816;
+  --green: #25D366;
+  --gradient: linear-gradient(135deg, #6366f1, #ec4899, #f59e0b);
+  --glass: rgba(255,255,255,0.08);
+}
+body { background: var(--darker); color: white; }
+.container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+/* HEADER */
+header { background: rgba(10,14,39,0.9); padding: 15px 0; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.logo { font-size: 28px; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* AI ORB */
+.ai-zone { text-align: center; padding: 30px 0 20px; }
+.ai-orb {
+  width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px;
+  background: var(--gradient); display: flex; align-items: center; justify-content: center;
+  font-size: 45px; box-shadow: 0 0 40px rgba(99,102,241,0.6); cursor: pointer;
+  transition: 0.3s;
+}
+.ai-orb.speaking { animation: pulse 0.6s infinite alternate; box-shadow: 0 0 60px rgba(236,72,153,0.9); }
+.ai-orb.listening { animation: pulse 1s infinite; box-shadow: 0 0 60px rgba(37,211,102,0.9); background: linear-gradient(135deg,#25D366,#128C7E); }
+@keyframes pulse { from{transform:scale(1)} to{transform:scale(1.1)} }
+.ai-status { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 5px; }
+
+/* CONTROLS */
+.controls { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 15px 0; }
+.ctrl-btn {
+  padding: 10px 18px; border-radius: 25px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 600; transition: 0.3s;
+}
+.ctrl-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.btn-voice { background: linear-gradient(135deg,#25D366,#128C7E); color: white; }
+.btn-stop { background: linear-gradient(135deg,#ef4444,#dc2626); color: white; }
+.btn-mic-ctrl { background: linear-gradient(135deg,#6366f1,#8b5cf6); color: white; }
+.btn-mem { background: linear-gradient(135deg,#fbbf24,#f59e0b); color: #1a1a1a; }
+.btn-key { background: linear-gradient(135deg,#ec4899,#be185d); color: white; }
+
+/* STATUS API */
+.api-status {
+  text-align: center; padding: 8px 20px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  margin: 0 auto 15px; display: inline-block;
+}
+.api-status.ok { background: rgba(74,222,128,0.2); border: 1px solid #4ade80; color: #4ade80; }
+.api-status.error { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #ef4444; }
+.api-status-wrap { text-align: center; }
+
+/* MEMORY BAND */
+.memory-band {
+  background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
+  border-radius: 12px; padding: 10px 15px; margin-bottom: 15px;
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center; font-size: 12px;
+}
+.mem-tag { background: rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 10px; }
+
+/* CHAT */
+.chat-box {
+  background: rgba(255,255,255,0.03); border-radius: 20px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.chat-head { background: var(--gradient); padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+.chat-head .av { font-size: 36px; animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+.chat-head strong { font-size: 16px; display: block; }
+.chat-head .online { font-size: 11px; opacity: 0.9; display: flex; align-items: center; gap: 5px; }
+.chat-head .online::before { content:''; width:7px; height:7px; background:#4ade80; border-radius:50%; animation: dot 1.5s infinite; }
+@keyframes dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.messages { height: 420px; overflow-y: auto; padding: 20px; background: rgba(0,0,0,0.2); }
+.messages::-webkit-scrollbar { width: 5px; }
+.messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 5px; }
+
+.msg { padding: 12px 16px; margin-bottom: 12px; border-radius: 18px; max-width: 82%; animation: fadeIn 0.4s; font-size: 14px; line-height: 1.6; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.msg.bot { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.06); }
+.msg.user { background: var(--gradient); margin-left: auto; }
+.msg.typing { background: rgba(255,255,255,0.06); padding: 15px 20px; }
+.dot-anim span { display: inline-block; width: 8px; height: 8px; background: rgba(255,255,255,0.6); border-radius: 50%; margin: 0 2px; animation: dotAnim 1.2s infinite; }
+.dot-anim span:nth-child(2) { animation-delay: 0.2s; }
+.dot-anim span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotAnim { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+
+/* SUGGESTIONS */
+.suggestions { padding: 10px 15px; background: rgba(0,0,0,0.1); border-top: 1px solid rgba(255,255,255,0.03); display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { background: rgba(99,102,241,0.25); border: 1px solid rgba(99,102,241,0.4); color: white; padding: 6px 13px; border-radius: 15px; font-size: 12px; cursor: pointer; transition: 0.3s; }
+.chip:hover { background: rgba(99,102,241,0.5); transform: translateY(-2px); }
+
+/* INPUT */
+.chat-input { display: flex; padding: 15px; background: rgba(0,0,0,0.3); gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
+.chat-input input { flex: 1; padding: 13px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 25px; font-size: 14px; outline: none; transition: 0.3s; }
+.chat-input input:focus { border-color: var(--primary); background: rgba(99,102,241,0.12); }
+.chat-input input::placeholder { color: rgba(255,255,255,0.4); }
+.btn-mic-in, .btn-send {
+  width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer;
+  font-size: 18px; transition: 0.3s; color: white;
+}
+.btn-mic-in { background: linear-gradient(135deg,#25D366,#128C7E); }
+.btn-mic-in.active { background: linear-gradient(135deg,#ef4444,#dc2626); animation: micAnim 1s infinite; }
+@keyframes micAnim { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+.btn-send { background: var(--gradient); box-shadow: 0 4px 15px rgba(99,102,241,0.4); }
+.btn-send:hover { transform: scale(1.1); }
+
+/* MODAL */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+.modal.open { display: flex; }
+.modal-box { background: #0d1130; padding: 35px; border-radius: 20px; max-width: 480px; width: 90%; border: 1px solid rgba(255,255,255,0.1); }
+.modal-box h3 { font-size: 20px; margin-bottom: 10px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.modal-box p { color: rgba(255,255,255,0.7); font-size: 13px; margin-bottom: 15px; line-height: 1.7; }
+.modal-box .steps { background: rgba(99,102,241,0.1); border-radius: 10px; padding: 12px 15px; margin-bottom: 15px; font-size: 13px; }
+.modal-box .steps p { color: rgba(255,255,255,0.85); margin: 5px 0; }
+.modal-box input { width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 13px; margin-bottom: 10px; outline: none; font-family: monospace; }
+.modal-box button { width: 100%; padding: 13px; background: var(--gradient); border: none; color: white; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
+.modal-box .close { background: none; border: 1px solid rgba(255,255,255,0.2); margin-top: 10px; color: rgba(255,255,255,0.6); font-size: 13px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--gradient); color: white; padding: 12px 24px; border-radius: 25px; font-weight: 600; z-index: 9999; opacity: 0; transition: 0.4s; font-size: 13px; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* FLOAT WA */
+.float-wa { position: fixed; bottom: 20px; right: 20px; background: var(--green); color: white; width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; text-decoration: none; box-shadow: 0 8px 25px rgba(37,211,102,0.5); z-index: 999; animation: waPulse 2s infinite; }
+@keyframes waPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+@media(max-width:600px) {
+  .ai-orb { width: 80px; height: 80px; font-size: 35px; }
+  .controls { gap: 6px; }
+  .ctrl-btn { padding: 8px 12px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<header>
+  <div class="logo">🤖 ROGWEB AI — WaMarket IA</div>
+</header>
+
+<div class="container">
+
+  <!-- AVATAR IA -->
+  <div class="ai-zone">
+    <div class="ai-orb" id="aiOrb" onclick="toggleVoice()">🤖</div>
+    <div class="ai-status" id="aiStatus">🟢 En ligne • Cliquez pour activer la voix</div>
+    <div class="api-status-wrap">
+      <span class="api-status error" id="apiStatusBadge">❌ Clé API non configurée</span>
+    </div>
+  </div>
+
+  <!-- CONTRÔLES -->
+  <div class="controls">
+    <button class="ctrl-btn btn-voice" id="btnVoice" onclick="toggleAutoVoice()">🔊 Voix : ON</button>
+    <button class="ctrl-btn btn-stop" id="btnStop" onclick="stopVoice()" disabled>⏹️ Stop</button>
+    <button class="ctrl-btn btn-mic-ctrl" id="btnMicCtrl" onclick="toggleMic()">🎤 Micro</button>
+    <button class="ctrl-btn btn-mem" onclick="showMemory()">🧠 Mémoire</button>
+    <button class="ctrl-btn btn-key" onclick="openModal()">🔑 Clé API</button>
+  </div>
+
+  <!-- MÉMOIRE -->
+  <div class="memory-band" id="memBand">
+    <span>🧠</span>
+    <span class="mem-tag" id="mName">👤 Visiteur</span>
+    <span class="mem-tag" id="mActivity">❓ Activité ?</span>
+    <span class="mem-tag" id="mVisits">1ère visite</span>
+    <span class="mem-tag" id="mBudget">💰 Budget ?</span>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-box">
+    <div class="chat-head">
+      <div class="av">🤖</div>
+      <div>
+        <strong>WaMarket IA <span id="nameDisplay"></span></strong>
+        <span class="online">En ligne — Gemini AI</span>
+      </div>
+    </div>
+
+    <div class="messages" id="msgs"></div>
+
+    <div class="suggestions">
+      <span class="chip" onclick="chip(this)">💰 Les prix</span>
+      <span class="chip" onclick="chip(this)">🏨 Hôtel</span>
+      <span class="chip" onclick="chip(this)">🍽️ Restaurant</span>
+      <span class="chip" onclick="chip(this)">🛒 Boutique</span>
+      <span class="chip" onclick="chip(this)">📞 Contact</span>
+      <span class="chip" onclick="chip(this)">🎁 Offre spéciale</span>
+    </div>
+
+    <div class="chat-input">
+      <input type="text" id="inp" placeholder="Tapez ou parlez 🎤..." onkeypress="if(event.key==='Enter')send()">
+      <button class="btn-mic-in" id="btnMic" onclick="toggleMic()" title="Micro">🎤</button>
+      <button class="btn-send" onclick="send()" title="Envoyer">➤</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- MODAL CLÉ API -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h3>🔑 Activer Gemini AI</h3>
+    <div class="steps">
+      <p>📋 <strong>Obtenir votre clé GRATUITE :</strong></p>
+      <p>1️⃣ Allez sur <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#6366f1;font-weight:bold">aistudio.google.com</a></p>
+      <p>2️⃣ Connectez-vous avec Google</p>
+      <p>3️⃣ Cliquez <strong>"Create API Key"</strong></p>
+      <p>4️⃣ Copiez-collez ici 👇</p>
+    </div>
+    <p>✅ <strong style="color:#4ade80">100% GRATUIT</strong> — 15 req/min illimitées !</p>
+    <input type="password" id="keyInput" placeholder="Votre clé API ici...">
+    <input type="text" id="nameInput" placeholder="Votre prénom (ex: Roger)">
+    <button onclick="saveKey()">✅ Activer maintenant</button>
+    <button class="close" onclick="closeModal()">✖ Fermer</button>
+  </div>
+</div>
+
+<a href="https://wa.me/2250170292408" class="float-wa" title="WhatsApp">💬</a>
+
+<script>
+const DEFAULT_API_KEY = "";
+
+const SYSTEM = `Tu es WAMARKET IA, l'Assistant Commercial Personnel de ROGWEB SERVICE 🇨🇮.
+
+PERSONNALITÉ :
+- Chaleureux, intelligent, persuasif, style africain professionnel
+- Tu utilises TOUJOURS le prénom du client quand tu le connais
+- Réponses courtes : max 4-5 lignes
+- Beaucoup d'emojis 😊🔥💪
+- Pose une seule question à la fin
+- Crée urgence et preuve sociale
+
+ROGWEB SERVICE :
+- WhatsApp : 0170292408 / 0799814557
+- Paiement : Orange Money 🟠 / Wave 🌊
+- Côte d'Ivoire 🇨🇮
+
+PRODUITS :
+- Agent IA Vendeur 24/7 → dès 50 000 F
+- Système IA Hôtel → 100K-200K F
+- Système IA Restaurant → 80K-150K F
+- Système IA Boutique → 75K-180K F
+- Caméra Intelligente IA → 150K-250K F
+
+PACKS :
+- STARTER : 50 000 F
+- BUSINESS : 150 000 F ⭐ (populaire)
+- PREMIUM : 250 000 F
+
+RÈGLES :
+1. Si client veut acheter → WhatsApp 0170292408
+2. Réponds TOUJOURS en français
+3. OFFRE SPÉCIALE : Installation gratuite cette semaine (2 places !)
+4. 50+ clients satisfaits en Côte d'Ivoire`;
+
+const S = {
+  key: localStorage.getItem("wm_key") || DEFAULT_API_KEY,
+  autoVoice: true,
+  listening: false,
+  speaking: false,
+  recog: null,
+  mem: JSON.parse(localStorage.getItem("wm_mem") || "{}"),
+  hist: JSON.parse(localStorage.getItem("wm_hist") || "[]")
+};
+
+window.onload = () => {
+  updateApiStatus();
+  updateMemUI();
+  const name = S.mem.name;
+  const visits = S.mem.visits || 0;
+  let welcome;
+  if (visits > 0 && name) {
+    welcome = `👋 Ravi de vous revoir <strong>${name}</strong> ! 😊<br>Je me souviens de vous ! Qu'est-ce que je peux faire pour vous aujourd'hui ? 🚀`;
+  } else {
+    welcome = `👋 Bonjour ! Je suis <strong>WaMarket IA</strong> 🤖<br>Votre assistant commercial personnel de ROGWEB SERVICE.<br><br>Vous avez quel type d'activité ? (boutique, hôtel, restaurant…)<br>Je vous propose la solution parfaite ⚡`;
+  }
+  addMsg("bot", welcome);
+  S.mem.visits = (S.mem.visits || 0) + 1;
+  saveMem();
+  setTimeout(() => {
+    if (S.autoVoice) speak(visits > 0 && name ? `Ravi de vous revoir ${name} ! Comment puis-je vous aider ?` : "Bonjour ! Je suis WaMarket IA. Vous avez quel type d'activité ?");
+  }, 800);
+};
+
+async function send() {
+  const inp = document.getElementById("inp");
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = "";
+  addMsg("user", text);
+  extractMemory(text);
+  const typingId = addTyping();
+  let reply;
+  if (S.key) reply = await callGemini(text);
+  if (!reply) reply = fallback(text);
+  removeTyping(typingId);
+  addMsg("bot", reply);
+  S.hist.push({ role: "user", content: text });
+  S.hist.push({ role: "bot", content: reply });
+  if (S.hist.length > 40) S.hist = S.hist.slice(-40);
+  localStorage.setItem("wm_hist", JSON.stringify(S.hist));
+  if (S.autoVoice) speak(reply);
+}
+
+async function callGemini(userMsg) {
+  try {
+    const contents = [];
+    const recent = S.hist.slice(-16);
+    for (const m of recent) {
+      contents.push({
+        role: m.role === "bot" ? "model" : "user",
+        parts: [{ text: m.content }]
+      });
+    }
+    contents.push({ role: "user", parts: [{ text: userMsg }] });
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${S.key}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM }] },
+          contents,
+          generationConfig: {
+            temperature: 0.85,
+            maxOutputTokens: 350,
+            topP: 0.9
+          }
+        })
+      }
+    );
+
+    const data = await res.json();
+    if (data.error) {
+      console.error("Gemini:", data.error.message);
+      showToast("❌ " + data.error.message);
+      updateApiStatus(false);
+      return null;
+    }
+    if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+      updateApiStatus(true);
+      return data.candidates[0].content.parts[0].text;
+    }
+    return null;
+  } catch (e) {
+    console.error(e);
+    showToast("❌ Erreur réseau");
+    return null;
+  }
+}
+
+function fallback(t) {
+  t = t.toLowerCase();
+  const n = S.mem.name;
+  const hi = n ? `${n}, ` : "";
+  if (t.match(/bonjour|salut|hello|bonsoir/)) return `👋 ${n ? `Ravi de vous revoir <strong>${n}</strong>` : "Bonjour !"} 😊<br>Je suis WaMarket IA de ROGWEB SERVICE.<br>Quelle est votre activité ? 🚀`;
+  if (t.match(/prix|tarif|coût|combien/)) return `💰 ${hi}voici nos tarifs :<br>• STARTER : 50 000 F<br>• BUSINESS : 150 000 F ⭐<br>• PREMIUM : 250 000 F<br><br>🎁 Installation OFFERTE cette semaine ! Quel pack vous intéresse ?`;
+  if (t.match(/hôtel|hotel|résidence/)) return `🏨 ${hi}pour votre hôtel :<br>✅ Réservations automatiques 24h/24<br>✅ Réponses clients instantanées<br>💰 100 000 à 200 000 F<br><br>On prépare votre devis gratuit ? ⚡`;
+  if (t.match(/restaurant|resto|manger/)) return `🍽️ ${hi}pour votre restaurant :<br>✅ Commandes automatiques<br>✅ Menu intelligent<br>💰 80 000 à 150 000 F<br><br>Devis gratuit en 2 min ? 😊`;
+  if (t.match(/boutique|magasin|commerce|vente/)) return `🛒 ${hi}pour votre boutique :<br>✅ Vendeur IA 24h/24<br>✅ Catalogue automatique<br>💰 75 000 à 180 000 F<br><br>On commence quand ? 🔥`;
+  if (t.match(/caméra|camera|sécurité/)) return `📹 ${hi}Caméra Intelligente IA :<br>✅ Détection avancée<br>✅ Alertes automatiques<br>💰 150 000 à 250 000 F — Installation incluse ! 🔥`;
+  if (t.match(/acheter|commander|je veux|intéressé/)) return `🎉 ${hi}parfait ! Pour commander :<br>📲 WhatsApp : <strong>0170292408</strong><br>💸 Orange Money 🟠 / Wave 🌊<br>⚡ Installation sous 24-48h !<br><br>On vous attend ! 💪`;
+  if (t.match(/contact|numéro|appel|joindre/)) return `📞 Nos contacts :<br>💬 WhatsApp 1 : <strong>0170292408</strong><br>📱 WhatsApp 2 : <strong>0799814557</strong><br>💸 Orange Money / Wave<br><br>Réponse en moins de 5 min ⚡`;
+  return `😊 ${hi}bonne question !<br>Je suis WaMarket IA de ROGWEB SERVICE 🇨🇮<br>Nous créons des assistants IA pour booster votre business.<br><br>💡 <strong>Configurez votre clé API Gemini</strong> (bouton 🔑) pour des réponses intelligentes !<br>Quelle est votre activité ? 🚀`;
+}
+
+function extractMemory(t) {
+  const lower = t.toLowerCase();
+  const nameM = t.match(/je m'appelle\s+(\w+)|mon nom est\s+(\w+)|moi c'est\s+(\w+)|c'est\s+(\w+)/i);
+  if (nameM) S.mem.name = nameM[1] || nameM[2] || nameM[3] || nameM[4];
+  if (lower.match(/hôtel|hotel|résidence/)) S.mem.activity = "Hôtel 🏨";
+  else if (lower.match(/restaurant|resto/)) S.mem.activity = "Restaurant 🍽️";
+  else if (lower.match(/boutique|magasin|commerce/)) S.mem.activity = "Boutique 🛒";
+  else if (lower.match(/caméra|camera/)) S.mem.activity = "Sécurité 📹";
+  if (lower.match(/starter|50/)) S.mem.budget = "STARTER 50K";
+  else if (lower.match(/business|150/)) S.mem.budget = "BUSINESS 150K";
+  else if (lower.match(/premium|250/)) S.mem.budget = "PREMIUM 250K";
+  saveMem();
+}
+
+function saveMem() {
+  localStorage.setItem("wm_mem", JSON.stringify(S.mem));
+  updateMemUI();
+}
+
+function updateMemUI() {
+  const m = S.mem;
+  document.getElementById("mName").textContent = m.name ? `👤 ${m.name}` : "👤 Visiteur";
+  document.getElementById("mActivity").textContent = m.activity || "❓ Activité ?";
+  document.getElementById("mBudget").textContent = m.budget || "💰 Budget ?";
+  document.getElementById("mVisits").textContent = `📅 ${m.visits || 1} visite(s)`;
+  document.getElementById("nameDisplay").textContent = m.name ? `| ${m.name} 👋` : "";
+}
+
+function showMemory() {
+  const m = S.mem;
+  showToast(`🧠 ${m.name || "?"} | ${m.activity || "?"} | ${m.budget || "?"} | ${m.visits || 1} visite(s)`);
+}
+
+function speak(text) {
+  if (!S.autoVoice || !text) return;
+  stopVoice();
+  const clean = text.replace(/<[^>]+>/g, "").replace(/[^\w\s,.!?àâéèêëîïôùûüç']/gu, "").trim();
+  if (!clean) return;
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = "fr-FR";
+  u.rate = 0.95;
+  u.pitch = 1.05;
+  u.volume = 1;
+  speechSynthesis.onvoiceschanged = () => setVoice(u);
+  setVoice(u);
+  u.onstart = () => {
+    S.speaking = true;
+    document.getElementById("aiOrb").classList.add("speaking");
+    document.getElementById("aiStatus").textContent = "🔊 Je parle...";
+    document.getElementById("btnStop").disabled = false;
+  };
+  u.onend = u.onerror = () => {
+    S.speaking = false;
+    document.getElementById("aiOrb").classList.remove("speaking");
+    document.getElementById("aiStatus").textContent = "🟢 En ligne";
+    document.getElementById("btnStop").disabled = true;
+  };
+  speechSynthesis.speak(u);
+}
+
+function setVoice(u) {
+  const voices = speechSynthesis.getVoices();
+  const fr = voices.find(v => v.lang.startsWith("fr") && v.name.toLowerCase().includes("female"))
+    || voices.find(v => v.lang === "fr-FR")
+    || voices.find(v => v.lang.startsWith("fr"));
+  if (fr) u.voice = fr;
+}
+
+function stopVoice() {
+  speechSynthesis.cancel();
+  S.speaking = false;
+  document.getElementById("aiOrb").classList.remove("speaking");
+  document.getElementById("btnStop").disabled = true;
+}
+
+function toggleVoice() {
+  if (S.speaking) stopVoice();
+  else speak("Bonjour, je suis WaMarket IA, votre assistant commercial de ROGWEB SERVICE !");
+}
+
+function toggleAutoVoice() {
+  S.autoVoice = !S.autoVoice;
+  document.getElementById("btnVoice").textContent = S.autoVoice ? "🔊 Voix : ON" : "🔇 Voix : OFF";
+  showToast(S.autoVoice ? "🔊 Voix activée" : "🔇 Voix coupée");
+}
+
+function toggleMic() {
+  if (S.listening) { S.recog?.stop(); return; }
+  if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+    showToast("❌ Micro non supporté (utilisez Chrome)");
+    return;
+  }
+  stopVoice();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  S.recog = new SR();
+  S.recog.lang = "fr-FR";
+  S.recog.continuous = false;
+  S.recog.interimResults = false;
+  S.recog.onstart = () => {
+    S.listening = true;
+    document.getElementById("btnMic").classList.add("active");
+    document.getElementById("btnMicCtrl").textContent = "⏹️ Stop Micro";
+    document.getElementById("aiOrb").classList.add("listening");
+    document.getElementById("aiStatus").textContent = "🎤 Je vous écoute...";
+    showToast("🎤 Parlez maintenant !");
+  };
+  S.recog.onresult = e => {
+    const t = e.results[0][0].transcript;
+    document.getElementById("inp").value = t;
+    showToast(`✅ "${t}"`);
+    setTimeout(send, 400);
+  };
+  S.recog.onerror = e => showToast("❌ Erreur : " + e.error);
+  S.recog.onend = () => {
+    S.listening = false;
+    document.getElementById("btnMic").classList.remove("active");
+    document.getElementById("btnMicCtrl").textContent = "🎤 Micro";
+    document.getElementById("aiOrb").classList.remove("listening");
+    document.getElementById("aiStatus").textContent = "🟢 En ligne";
+  };
+  S.recog.start();
+}
+
+function addMsg(role, html) {
+  const box = document.getElementById("msgs");
+  const d = document.createElement("div");
+  d.className = `msg ${role}`;
+  d.innerHTML = html;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+  return d;
+}
+
+function addTyping() {
+  const box = document.getElementById("msgs");
+  const id = "typ_" + Date.now();
+  const d = document.createElement("div");
+  d.className = "msg typing bot";
+  d.id = id;
+  d.innerHTML = `<div class="dot-anim"><span></span><span></span><span></span></div>`;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) { document.getElementById(id)?.remove(); }
+
+function chip(el) {
+  document.getElementById("inp").value = el.textContent;
+  send();
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+function updateApiStatus(ok) {
+  const b = document.getElementById("apiStatusBadge");
+  if (ok === true) {
+    b.textContent = "✅ Gemini AI connecté";
+    b.className = "api-status ok";
+  } else if (ok === false) {
+    b.textContent = "❌ Clé API invalide";
+    b.className = "api-status error";
+  } else {
+    if (S.key) {
+      b.textContent = "🔑 Clé API configurée";
+      b.className = "api-status ok";
+    } else {
+      b.textContent = "❌ Clé API requise — Cliquez 🔑";
+      b.className = "api-status error";
+    }
+  }
+}
+
+function openModal() {
+  document.getElementById("modal").classList.add("open");
+  if (S.key) document.getElementById("keyInput").value = S.key;
+  if (S.mem.name) document.getElementById("nameInput").value = S.mem.name;
+}
+
+function closeModal() {
+  document.getElementById("modal").classList.remove("open");
+}
+
+function saveKey() {
+  const key = document.getElementById("keyInput").value.trim();
+  const name = document.getElementById("nameInput").value.trim();
+
+  // ✅ CORRECTION ICI — Accepte toutes les clés de plus de 20 caractères
+  if (!key) { showToast("❌ Entrez votre clé API !"); return; }
+  if (key.length < 20) { showToast("❌ Clé trop courte !"); return; }
+
+  S.key = key;
+  localStorage.setItem("wm_key", key);
+  if (name) { S.mem.name = name; saveMem(); }
+  updateApiStatus(true);
+  closeModal();
+  showToast("✅ Gemini AI activé !");
+  setTimeout(() => {
+    document.getElementById("msgs").innerHTML = "";
+    window.onload();
+  }, 800);
+}
+
+document.getElementById("modal").addEventListener("click", e => {
+  if (e.target === document.getElementById("modal")) closeModal();
+});
+</script>
+</body>
+</html>
