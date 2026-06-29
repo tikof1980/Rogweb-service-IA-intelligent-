@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROGWEB AI - WaMarket IA | Assistants IA pour Entrepreneurs</title>
+<meta name="description" content="Créez votre Assistant IA professionnel qui vend 24h/24.">
+<meta name="theme-color" content="#6366f1">
+<link rel="icon" href="https://api.iconify.design/fluent-emoji/robot.svg">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+:root {
+  --primary: #6366f1; --secondary: #ec4899; --accent: #8b5cf6;
+  --gold: #fbbf24; --dark: #0a0e27; --darker: #050816;
+  --green: #25D366; --red: #ef4444;
+  --gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f59e0b 100%);
+  --gradient-dark: linear-gradient(135deg, #0a0e27 0%, #1e1b4b 100%);
+  --glass: rgba(255,255,255,0.08);
+}
+html { scroll-behavior: smooth; }
+body { background: var(--darker); color: white; line-height: 1.6; overflow-x: hidden; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* BG ANIMATION */
+.bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+.bg-animation::before, .bg-animation::after {
+  content: ''; position: absolute; width: 500px; height: 500px;
+  border-radius: 50%; filter: blur(120px); opacity: 0.4; animation: float 20s infinite ease-in-out;
+}
+.bg-animation::before { background: var(--primary); top: -100px; left: -100px; }
+.bg-animation::after { background: var(--secondary); bottom: -100px; right: -100px; animation-delay: -10s; }
+@keyframes float { 0%,100%{transform:translate(0,0)} 50%{transform:translate(100px,100px)} }
+
+/* HEADER */
+header {
+  background: rgba(10,14,39,0.85); backdrop-filter: blur(20px);
+  padding: 18px 0; position: sticky; top: 0; z-index: 1000;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+header nav { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-links { display: flex; list-style: none; gap: 35px; }
+.nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 15px; transition: 0.3s; position: relative; }
+.nav-links a:hover { color: white; }
+.nav-links a::after { content:''; position:absolute; bottom:-5px; left:0; width:0; height:2px; background:var(--gradient); transition:0.3s; }
+.nav-links a:hover::after { width:100%; }
+.btn-whatsapp { background: var(--green); color: white; padding: 11px 22px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 14px; transition: 0.3s; }
+.btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,211,102,0.6); }
+
+/* HERO */
+.hero { padding: 120px 0 100px; text-align: center; }
+.hero-badge { display: inline-block; padding: 8px 20px; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; font-size: 13px; margin-bottom: 25px; }
+.hero-badge span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+.hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: 72px; font-weight: 900; margin-bottom: 25px; line-height: 1.1; }
+.hero h1 .highlight { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-subtitle { font-size: 20px; max-width: 700px; margin: 0 auto 40px; color: rgba(255,255,255,0.7); }
+.hero-buttons { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 70px; }
+.btn-primary, .btn-secondary {
+  padding: 16px 38px; border-radius: 30px; text-decoration: none;
+  font-weight: 600; transition: 0.3s; display: inline-block; font-size: 15px; border: none; cursor: pointer;
+}
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 10px 30px rgba(99,102,241,0.4); }
+.btn-primary:hover { transform: translateY(-3px); }
+.btn-secondary { background: var(--glass); color: white; border: 1px solid rgba(255,255,255,0.2); }
+.btn-secondary:hover { background: rgba(255,255,255,0.15); }
+.stats { display: flex; justify-content: center; gap: 70px; flex-wrap: wrap; }
+.stats div { text-align: center; }
+.stats strong { font-family: 'Space Grotesk', sans-serif; font-size: 48px; display: block; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+.stats span { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+/* SECTIONS */
+section { padding: 100px 0; position: relative; }
+section h2 { font-family: 'Space Grotesk', sans-serif; text-align: center; font-size: 52px; margin-bottom: 15px; font-weight: 900; }
+section h2 .grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.section-subtitle { text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 60px; font-size: 17px; }
+
+/* SERVICES */
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 25px; }
+.service-card {
+  background: var(--glass); backdrop-filter: blur(20px);
+  padding: 40px 30px; border-radius: 24px; text-align: center;
+  border: 1px solid rgba(255,255,255,0.08); transition: 0.4s; position: relative; overflow: hidden;
+}
+.service-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gradient); transform:scaleX(0); transition:0.4s; transform-origin:left; }
+.service-card:hover { transform: translateY(-10px); border-color: rgba(99,102,241,0.4); }
+.service-card:hover::before { transform: scaleX(1); }
+.service-card .icon { font-size: 60px; margin-bottom: 20px; display: inline-block; }
+.service-card h3 { font-size: 22px; margin-bottom: 15px; font-weight: 700; }
+.service-card p { color: rgba(255,255,255,0.7); margin-bottom: 22px; font-size: 14px; }
+.price-tag-mini { display: inline-block; background: var(--gradient); color: white; padding: 8px 22px; border-radius: 20px; font-weight: 700; font-size: 14px; }
+
+/* ═══════════════════════════════════
+   SUPER CHAT IA - ZONE PRINCIPALE
+═══════════════════════════════════ */
+.chat-section { background: var(--gradient-dark); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+/* AVATAR IA ANIMÉ */
+.ai-avatar-zone { text-align: center; margin-bottom: 30px; }
+.ai-orb {
+  width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 15px;
+  background: var(--gradient); display: flex; align-items: center; justify-content: center;
+  font-size: 55px; position: relative; cursor: pointer;
+  box-shadow: 0 0 40px rgba(99,102,241,0.6);
+  transition: 0.3s;
+}
+.ai-orb.speaking {
+  animation: orbPulse 0.6s infinite alternate;
+  box-shadow: 0 0 60px rgba(236,72,153,0.8);
+}
+.ai-orb.listening {
+  animation: orbListen 1s infinite;
+  box-shadow: 0 0 60px rgba(37,211,102,0.8);
+  background: linear-gradient(135deg, #25D366, #128C7E);
+}
+@keyframes orbPulse { from{transform:scale(1)} to{transform:scale(1.1)} }
+@keyframes orbListen { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+.ai-status-text { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+.ai-mood { font-size: 13px; padding: 5px 15px; border-radius: 20px; background: var(--glass); display: inline-block; }
+
+/* BARRE CONTRÔLES VOIX */
+.voice-controls {
+  display: flex; justify-content: center; gap: 12px;
+  margin-bottom: 25px; flex-wrap: wrap;
+}
+.voice-btn {
+  padding: 10px 20px; border-radius: 25px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 8px;
+}
+.voice-btn.green { background: linear-gradient(135deg, #25D366, #128C7E); color: white; }
+.voice-btn.red { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+.voice-btn.purple { background: var(--gradient-2); color: white; }
+.voice-btn.gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1a1a1a; }
+.voice-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.voice-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* INDICATEUR VOLUME */
+.volume-bar {
+  display: flex; justify-content: center; gap: 3px; height: 30px;
+  align-items: flex-end; margin-bottom: 20px; opacity: 0; transition: 0.3s;
+}
+.volume-bar.active { opacity: 1; }
+.vol-bar { width: 4px; background: var(--gradient); border-radius: 2px; transition: height 0.1s; }
+
+/* CHAT CONTAINER */
+.chat-container {
+  max-width: 800px; margin: 0 auto;
+  background: rgba(255,255,255,0.03); backdrop-filter: blur(20px);
+  border-radius: 24px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+}
+.chat-header { background: var(--gradient); color: white; padding: 22px; display: flex; align-items: center; gap: 15px; }
+.chat-avatar { font-size: 42px; animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+.chat-header strong { display: block; font-size: 18px; font-weight: 700; }
+.online { font-size: 12px; opacity: 0.95; display: flex; align-items: center; gap: 5px; }
+.online::before { content:''; width:8px; height:8px; background:#4ade80; border-radius:50%; animation:pulseDot 1.5s infinite; }
+@keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.header-badges { margin-left: auto; display: flex; gap: 8px; }
+.hbadge { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+.hbadge:hover { background: rgba(255,255,255,0.35); }
+
+/* MÉMOIRE BADGE */
+.memory-strip {
+  background: rgba(99,102,241,0.15); border-bottom: 1px solid rgba(99,102,241,0.2);
+  padding: 10px 20px; font-size: 12px; color: rgba(255,255,255,0.7);
+  display: flex; gap: 15px; flex-wrap: wrap; align-items: center;
+}
+.memory-item { background: rgba(255,255,255,0.08); padding: 3px 10px; border-radius: 10px; }
+
+.chat-messages { height: 500px; overflow-y: auto; padding: 25px; background: rgba(0,0,0,0.2); }
+.chat-messages::-webkit-scrollbar { width: 6px; }
+.chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+.message { padding: 14px 20px; margin-bottom: 14px; border-radius: 20px; max-width: 85%; animation: slideIn 0.4s; font-size: 14px; line-height: 1.6; position: relative; }
+@keyframes slideIn { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+.message.bot { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.05); }
+.message.user { background: var(--gradient); color: white; margin-left: auto; }
+.message a { color: var(--gold); font-weight: bold; }
+.msg-time { font-size: 10px; opacity: 0.5; margin-top: 5px; }
+
+/* BOUTON SPEAKER SUR MESSAGE */
+.speak-btn {
+  position: absolute; bottom: 8px; right: 8px;
+  background: rgba(255,255,255,0.15); border: none; border-radius: 50%;
+  width: 28px; height: 28px; cursor: pointer; font-size: 12px;
+  color: white; transition: 0.3s; display: flex; align-items: center; justify-content: center;
+}
+.speak-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* SUGGESTIONS RAPIDES */
+.quick-suggestions {
+  padding: 12px 20px; background: rgba(0,0,0,0.1);
+  border-top: 1px solid rgba(255,255,255,0.03);
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.suggestion-chip {
+  background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.3);
+  color: white; padding: 6px 14px; border-radius: 15px; font-size: 12px;
+  cursor: pointer; transition: 0.3s; white-space: nowrap;
+}
+.suggestion-chip:hover { background: rgba(99,102,241,0.5); transform: translateY(-2px); }
+
+.chat-input { display: flex; padding: 18px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.05); gap: 10px; align-items: center; }
+.chat-input input {
+  flex: 1; padding: 14px 20px; border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05); color: white;
+  border-radius: 25px; outline: none; font-size: 14px; transition: 0.3s;
+}
+.chat-input input:focus { border-color: var(--primary); background: rgba(99,102,241,0.1); }
+.chat-input input::placeholder { color: rgba(255,255,255,0.4); }
+.btn-mic {
+  background: linear-gradient(135deg, #25D366, #128C7E); color: white; border: none;
+  width: 52px; height: 52px; border-radius: 50%; cursor: pointer;
+  font-size: 20px; transition: 0.3s;
+}
+.btn-mic.recording { background: linear-gradient(135deg, #ef4444, #dc2626); animation: micPulse 1s infinite; }
+@keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+.btn-send {
+  background: var(--gradient); color: white; border: none;
+  width: 52px; height: 52px; border-radius: 50%; cursor: pointer;
+  font-size: 20px; transition: 0.3s; box-shadow: 0 5px 20px rgba(99,102,241,0.4);
+}
+.btn-send:hover { transform: scale(1.1) rotate(15deg); }
+
+/* PANNEAU MÉMOIRE */
+.memory-panel {
+  display: none; background: rgba(0,0,0,0.4); backdrop-filter: blur(20px);
+  border: 1px solid rgba(99,102,241,0.3); border-radius: 20px;
+  padding: 25px; max-width: 800px; margin: 20px auto 0;
+}
+.memory-panel.open { display: block; animation: slideIn 0.3s; }
+.memory-panel h4 { margin-bottom: 15px; font-family: 'Space Grotesk', sans-serif; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.memory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.memory-card { background: var(--glass); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+.memory-card label { font-size: 11px; color: rgba(255,255,255,0.5); display: block; margin-bottom: 4px; }
+.memory-card span { font-size: 14px; font-weight: 600; color: white; }
+
+/* PRICING */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 30px; }
+.price-card {
+  background: var(--glass); backdrop-filter: blur(20px);
+  padding: 45px 32px; border-radius: 24px; text-align: center;
+  border: 1px solid rgba(255,255,255,0.08); position: relative; transition: 0.4s;
+}
+.price-card:hover { transform: translateY(-10px); }
+.price-card.featured { background: var(--gradient); transform: scale(1.05); border: none; }
+.badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--dark); padding: 6px 22px; border-radius: 20px; font-weight: 800; font-size: 11px; }
+.price-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; margin-bottom: 15px; }
+.price-amount { font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 900; margin-bottom: 30px; }
+.price-card:not(.featured) .price-amount { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.price-card ul { list-style: none; margin-bottom: 30px; text-align: left; }
+.price-card li { padding: 9px 0; font-size: 14px; color: rgba(255,255,255,0.85); }
+.price-card.featured li { color: white; }
+
+/* CONTACT */
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-bottom: 40px; }
+.contact-card { background: var(--glass); backdrop-filter: blur(20px); padding: 40px; border-radius: 24px; text-align: center; text-decoration: none; color: white; transition: 0.4s; border: 1px solid rgba(255,255,255,0.08); }
+.contact-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+.contact-card .icon { font-size: 50px; margin-bottom: 15px; }
+.contact-card h3 { margin-bottom: 10px; }
+.contact-card p { color: rgba(255,255,255,0.7); }
+.payment { text-align: center; background: var(--glass); backdrop-filter: blur(20px); padding: 35px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); }
+
+/* MODAL */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+.modal.active { display: flex; }
+.modal-content { background: var(--dark); padding: 40px; border-radius: 24px; max-width: 520px; width: 90%; border: 1px solid rgba(255,255,255,0.1); }
+.modal-content h3 { margin-bottom: 15px; font-family: 'Space Grotesk', sans-serif; font-size: 22px; }
+.modal-content p { color: rgba(255,255,255,0.7); margin-bottom: 20px; font-size: 14px; line-height: 1.6; }
+.modal-content input { width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; margin-bottom: 12px; font-family: monospace; font-size: 13px; }
+.modal-content button { width: 100%; padding: 14px; background: var(--gradient); border: none; color: white; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 15px; }
+.steps { background: rgba(99,102,241,0.1); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+.steps p { margin: 6px 0; font-size: 13px; color: rgba(255,255,255,0.8); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gradient); color: white; padding: 14px 28px; border-radius: 30px; font-weight: 600; z-index: 9999; opacity: 0; transition: 0.4s; font-size: 14px; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+footer { background: var(--darker); padding: 50px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+footer p { margin: 6px 0; color: rgba(255,255,255,0.5); font-size: 14px; }
+
+.float-whatsapp {
+  position: fixed; bottom: 25px; right: 25px;
+  background: var(--green); color: white;
+  width: 62px; height: 62px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; text-decoration: none;
+  box-shadow: 0 10px 30px rgba(37,211,102,0.5); z-index: 999;
+  animation: pulseW 2s infinite;
+}
+@keyframes pulseW { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+@media(max-width:768px) {
+  .nav-links { display: none; }
+  .hero { padding: 80px 0 60px; }
+  .hero h1 { font-size: 38px; }
+  section h2 { font-size: 32px; }
+  .stats { gap: 30px; }
+  .stats strong { font-size: 36px; }
+  .price-card.featured { transform: none; }
+  .voice-controls { gap: 8px; }
+  .voice-btn { padding: 8px 14px; font-size: 12px; }
+  .ai-orb { width: 90px; height: 90px; font-size: 40px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-animation"></div>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast"></div>
+
+<header>
+  <nav class="container">
+    <div class="logo">🤖 ROGWEB AI</div>
+    <ul class="nav-links">
+      <li><a href="#accueil">Accueil</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#chat">Chat IA</a></li>
+      <li><a href="#tarifs">Tarifs</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="https://wa.me/2250170292408" class="btn-whatsapp">💬 WhatsApp</a>
+  </nav>
+</header>
+
+<section id="accueil" class="hero">
+  <div class="container">
+    <div class="hero-badge">⚡ <span>GEMINI AI + VOIX + MÉMOIRE</span> • Côte d'Ivoire 🇨🇮</div>
+    <h1>L'Assistant IA qui<br><span class="highlight">VEND 24h/24</span></h1>
+    <p class="hero-subtitle">Automatisez vos ventes avec l'intelligence artificielle. Répondez à vos clients instantanément, boostez votre business et dormez tranquille. 🚀</p>
+    <div class="hero-buttons">
+      <a href="#chat" class="btn-primary">🤖 Parler à l'IA Maintenant</a>
+      <a href="#tarifs" class="btn-secondary">Voir les Tarifs</a>
+    </div>
+    <div class="stats">
+      <div><strong>50+</strong><span>CLIENTS SATISFAITS</span></div>
+      <div><strong>24/7</strong><span>DISPONIBILITÉ</span></div>
+      <div><strong>+40%</strong><span>VENTES EN PLUS</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="container">
+    <h2>Nos <span class="grad">Solutions IA</span></h2>
+    <p class="section-subtitle">Des assistants IA sur mesure pour chaque type de business</p>
+    <div class="services-grid">
+      <div class="service-card"><div class="icon">🤖</div><h3>Agent IA Vendeur</h3><p>Répond à vos clients, présente vos produits et convertit automatiquement.</p><span class="price-tag-mini">Dès 50 000 F</span></div>
+      <div class="service-card"><div class="icon">🏨</div><h3>Système Hôtel</h3><p>Réservations automatiques, infos clients, gestion intelligente 24h/24.</p><span class="price-tag-mini">100K - 200K F</span></div>
+      <div class="service-card"><div class="icon">🍽️</div><h3>Système Restaurant</h3><p>Prise de commandes auto, menu intelligent, fidélisation clients.</p><span class="price-tag-mini">80K - 150K F</span></div>
+      <div class="service-card"><div class="icon">🛒</div><h3>Boutique en Ligne</h3><p>Catalogue intelligent, vendeur IA, paiement automatique.</p><span class="price-tag-mini">75K - 180K F</span></div>
+      <div class="service-card"><div class="icon">📹</div><h3>Caméra Intelligente</h3><p>Surveillance IA avec détection avancée et alertes automatiques.</p><span class="price-tag-mini">150K - 250K F</span></div>
+      <div class="service-card"><div class="icon">📈</div><h3>Sur Mesure</h3><p>Solution personnalisée pour développer votre entreprise.</p><span class="price-tag-mini">Sur Devis</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SUPER CHAT IA ═══════════ -->
+<section id="chat" class="chat-section">
+  <div class="container">
+    <h2>🤖 Votre <span class="grad">Agent IA Personnel</span></h2>
+    <p class="section-subtitle">Gemini AI • Voix Naturelle • Micro • Mémoire Complète ✨</p>
+
+    <!-- AVATAR ORBE IA -->
+    <div class="ai-avatar-zone">
+      <div class="ai-orb" id="aiOrb" onclick="toggleVoice()">🤖</div>
+      <div class="ai-status-text" id="aiStatusText">🟢 En ligne • Cliquez sur l'orbe pour activer la voix</div>
+      <div class="ai-mood" id="aiMood">😊 Prêt à vous aider</div>
+    </div>
+
+    <!-- INDICATEUR VOLUME -->
+    <div class="volume-bar" id="volumeBar">
+      <div class="vol-bar" id="vb1" style="height:5px"></div>
+      <div class="vol-bar" id="vb2" style="height:10px"></div>
+      <div class="vol-bar" id="vb3" style="height:20px"></div>
+      <div class="vol-bar" id="vb4" style="height:15px"></div>
+      <div class="vol-bar" id="vb5" style="height:8px"></div>
+      <div class="vol-bar" id="vb6" style="height:25px"></div>
+      <div class="vol-bar" id="vb7" style="height:12px"></div>
+    </div>
+
+    <!-- CONTRÔLES VOIX -->
+    <div class="voice-controls">
+      <button class="voice-btn green" id="btnSpeak" onclick="toggleAutoVoice()">🔊 Voix Auto : ON</button>
+      <button class="voice-btn red" id="btnStop" onclick="stopVoice()" disabled>⏹️ Stop Voix</button>
+      <button class="voice-btn purple" id="btnMic2" onclick="startMicChat()">🎤 Parler à l'IA</button>
+      <button class="voice-btn gold" onclick="toggleMemoryPanel()">🧠 Ma Mémoire</button>
+      <button class="voice-btn purple" onclick="openModal()">🔑 Clé API</button>
+    </div>
+
+    <!-- PANNEAU MÉMOIRE -->
+    <div class="memory-panel" id="memoryPanel">
+      <h4>🧠 Ce que je sais sur vous</h4>
+      <div class="memory-grid" id="memoryGrid">
+        <!-- Rempli par JS -->
+      </div>
+    </div>
+
+    <!-- CHAT BOX -->
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="chat-avatar">🤖</div>
+        <div>
+          <strong>WaMarket IA <span id="userNameDisplay"></span></strong>
+          <span class="online">En ligne • Gemini AI activé</span>
+        </div>
+        <div class="header-badges">
+          <span class="hbadge" onclick="clearMemory()">🗑️ Reset</span>
+          <span class="hbadge" onclick="exportChat()">💾 Exporter</span>
+        </div>
+      </div>
+
+      <!-- BANDE MÉMOIRE -->
+      <div class="memory-strip" id="memoryStrip">
+        <span>🧠 Mémoire :</span>
+        <span class="memory-item" id="memName">Visiteur</span>
+        <span class="memory-item" id="memActivity">Activité inconnue</span>
+        <span class="memory-item" id="memVisits">1ère visite</span>
+      </div>
+
+      <div class="chat-messages" id="chatMessages"></div>
+
+      <!-- SUGGESTIONS RAPIDES -->
+      <div class="quick-suggestions" id="quickSuggestions">
+        <span class="suggestion-chip" onclick="useSuggestion(this)">💰 Voir les prix</span>
+        <span class="suggestion-chip" onclick="useSuggestion(this)">🏨 Système hôtel</span>
+        <span class="suggestion-chip" onclick="useSuggestion(this)">🍽️ Restaurant</span>
+        <span class="suggestion-chip" onclick="useSuggestion(this)">🛒 Boutique</span>
+        <span class="suggestion-chip" onclick="useSuggestion(this)">📞 Vous contacter</span>
+      </div>
+
+      <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Tapez ou parlez à l'IA... 🎤" onkeypress="if(event.key==='Enter')sendMessage()">
+        <button class="btn-mic" id="btnMic" onclick="startMicChat()" title="Parler">🎤</button>
+        <button class="btn-send" onclick="sendMessage()" title="Envoyer">➤</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tarifs">
+  <div class="container">
+    <h2>Nos <span class="grad">Tarifs</span></h2>
+    <p class="section-subtitle">Investissement rentabilisé dès le 1er mois 💰</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>STARTER</h3>
+        <div class="price-amount">50K F</div>
+        <ul><li>✅ Agent IA basique</li><li>✅ Réponses automatiques</li><li>✅ Installation incluse</li><li>✅ Support 7 jours</li></ul>
+        <a href="https://wa.me/2250170292408?text=Pack%20STARTER" class="btn-primary">Commander</a>
+      </div>
+      <div class="price-card featured">
+        <div class="badge">⭐ POPULAIRE</div>
+        <h3>BUSINESS</h3>
+        <div class="price-amount">150K F</div>
+        <ul><li>✅ Agent IA avancé</li><li>✅ Multi-plateformes</li><li>✅ Catalogue produits</li><li>✅ Statistiques ventes</li><li>✅ Support 30 jours</li></ul>
+        <a href="https://wa.me/2250170292408?text=Pack%20BUSINESS" class="btn-secondary">Commander</a>
+      </div>
+      <div class="price-card">
+        <h3>PREMIUM</h3>
+        <div class="price-amount">250K F</div>
+        <ul><li>✅ IA sur mesure complète</li><li>✅ Caméra intelligente</li><li>✅ Système complet</li><li>✅ Formation incluse</li><li>✅ Support à vie</li></ul>
+        <a href="https://wa.me/2250170292408?text=Pack%20PREMIUM" class="btn-primary">Commander</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <h2><span class="grad">Contactez-Nous</span></h2>
+    <p class="section-subtitle">Réponse en moins de 5 minutes ⚡</p>
+    <div class="contact-grid">
+      <a href="https://wa.me/2250170292408" class="contact-card"><div class="icon">💬</div><h3>WhatsApp 1</h3><p>0170292408</p></a>
+      <a href="https://wa.me/2250799814557" class="contact-card"><div class="icon">📱</div><h3>WhatsApp 2</h3><p>0799814557</p></a>
+      <a href="tel:0170292408" class="contact-card"><div class="icon">📞</div><h3>Appel Direct</h3><p>0170292408</p></a>
+    </div>
+    <div class="payment">
+      <p>💸 <strong>Paiement :</strong> Orange Money 🟠 / Wave 🌊</p>
+      <p>🚚 <strong>Livraison :</strong> Partout en Côte d'Ivoire</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© 2024 <strong>ROGWEB AI - WaMarket IA</strong> • Tous droits réservés</p>
+    <p>🇨🇮 Fait avec ❤️ en Côte d'Ivoire • Propulsé par Gemini AI 🤖</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/2250170292408" class="float-whatsapp" title="WhatsApp">💬</a>
+
+<!-- MODAL API KEY -->
+<div class="modal" id="apiModal">
+  <div class="modal-content">
+    <h3>🔑 Configurer Gemini AI</h3>
+    <div class="steps">
+      <p>📋 <strong>Comment obtenir la clé GRATUITE :</strong></p>
+      <p>1️⃣ Allez sur <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#6366f1;font-weight:bold">aistudio.google.com</a></p>
+      <p>2️⃣ Connectez-vous avec Google</p>
+      <p>3️⃣ Cliquez <strong>"Create API Key"</strong></p>
+      <p>4️⃣ Copiez et collez ici 👇</p>
+    </div>
+    <p>C'est <strong style="color:#4ade80">100% GRATUIT</strong> avec 15 requêtes/min illimitées !</p>
+    <input type="password" id="apiKeyInput" placeholder="AIza...">
+    <input type="text" id="userNameInput" placeholder="Votre prénom (optionnel)">
+    <button onclick="saveApiKey()">💾 Activer Gemini AI</button>
+    <p style="text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,0.4)">🔒 Stockée uniquement dans votre navigateur</p>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+//  🤖 WAMARKET IA - SUPER AGENT PERSONNEL
+//  Gemini AI + Voix TTS + Micro STT + Mémoire Longue
+// ════════════════════════════════════════════════════
+
+// ── SYSTEM PROMPT GEMINI ──────────────────────────
+const SYSTEM_PROMPT = `Tu es WAMARKET IA, l'Assistant Commercial Personnel et Intelligent de ROGWEB SERVICE 🇨🇮.
+
+🎯 PERSONNALITÉ :
+- Tu es chaleureux, intelligent, drôle et très persuasif
+- Tu parles comme un ami africain professionnel
+- Tu te souviens de TOUT ce que le client te dit
+- Tu utilises le prénom du client dès que tu le connais
+- Tu es empathique : tu t'adaptes à l'humeur du client
+
+🧠 MÉMOIRE :
+- Si le client donne son nom, tu l'utilises TOUJOURS
+- Tu te souviens de son activité, ses besoins, ses objections
+- Tu fais référence aux messages précédents naturellement
+
+🏢 ENTREPRISE - ROGWEB SERVICE :
+- WhatsApp : 0170292408 / 0799814557
+- Paiement : Orange Money 🟠 / Wave 🌊
+- Localisation : Côte d'Ivoire 🇨🇮
+- Site web : rogweb ai
+
+🛒 PRODUITS & PRIX :
+1. Agent IA Vendeur 24/7 → dès 50 000 FCFA
+2. Système IA Hôtel → 100 000 à 200 000 FCFA
+3. Système IA Restaurant → 80 000 à 150 000 FCFA
+4. Système IA Boutique → 75 000 à 180 000 FCFA
+5. Caméra Intelligente IA → 150 000 à 250 000 FCFA
+6. Solutions sur mesure → sur devis
+
+📦 PACKS :
+- STARTER : 50 000 F (pour débuter)
+- BUSINESS : 150 000 F ⭐ (le plus vendu)
+- PREMIUM : 250 000 F (tout inclus)
+
+🎯 RÈGLES ABSOLUES :
+1. Réponses max 4-5 lignes (courtes et percutantes)
+2. Beaucoup d'emojis 😊🔥💪
+3. Pose UNE seule question à la fois
+4. Crée de l'urgence ("il reste 2 places cette semaine !")
+5. Utilise la preuve sociale ("50+ clients satisfaits en CI")
+6. TOUJOURS finir par un appel à l'action
+7. Si le client veut acheter → redirige vers WhatsApp 0170292408
+8. Si quelqu'un demande ton nom → "Je suis WaMarket IA 🤖, ton assistant personnel de ROGWEB SERVICE !"
+9. Tu PARLES aussi (voix naturelle activée)
+10. Ne répète JAMAIS la même réponse
+
+🎁 OFFRE SPÉCIALE : Installation OFFERTE cette semaine (2 places restantes ⏰)`;
+
+// ── ÉTAT GLOBAL ───────────────────────────────────
+const STATE = {
+  apiKey: localStorage.getItem("gemini_api_key") || "",
+  autoVoice: true,
+  isListening: false,
+  isSpeaking: false,
+  recognition: null,
+  currentUtterance: null,
+  volInterval: null,
+  memory: JSON.parse(localStorage.getItem("wamarket_memory") || "{}"),
+  history: JSON.parse(localStorage.getItem("wamarket_history") || "[]"),
+  sessionMessages: []
+};
+
+// ── MÉMOIRE ───────────────────────────────────────
+function saveMemory() {
+  localStorage.setItem("wamarket_memory", JSON.stringify(STATE.memory));
+  updateMemoryUI();
+}
+
+function updateMemoryFromMessage(text) {
+  const t = text.toLowerCase();
+  // Détecter le prénom
+  const nameMatch = text.match(/je m'appelle\s+(\w+)|mon nom est\s+(\w+)|c'est\s+(\w+)\s+ici|moi c'est\s+(\w+)/i);
+  if (nameMatch) {
+    STATE.memory.name = nameMatch[1] || nameMatch[2] || nameMatch[3] || nameMatch[4];
+  }
+  // Détecter l'activité
+  if (t.includes("hôtel") || t.includes("hotel") || t.includes("résidence")) STATE.memory.activity = "Hôtel/Résidence 🏨";
+  else if (t.includes("restaurant") || t.includes("resto")) STATE.memory.activity = "Restaurant 🍽️";
+  else if (t.includes("boutique") || t.includes("magasin") || t.includes("commerce")) STATE.memory.activity = "Boutique 🛒";
+  else if (t.includes("caméra") || t.includes("camera") || t.includes("surveillance")) STATE.memory.activity = "Sécurité 📹";
+
+  // Détecter budget
+  if (t.includes("starter") || t.includes("50")) STATE.memory.budget = "STARTER 50K";
+  else if (t.includes("business") || t.includes("150")) STATE.memory.budget = "BUSINESS 150K";
+  else if (t.includes("premium") || t.includes("250")) STATE.memory.budget = "PREMIUM 250K";
+
+  // Compteur visites
+  STATE.memory.visits = (STATE.memory.visits || 0) + 1;
+  STATE.memory.lastSeen = new Date().toLocaleDateString("fr-FR");
+
+  saveMemory();
+}
+
+function updateMemoryUI() {
+  const m = STATE.memory;
+  // Bande mémoire
+  document.getElementById("memName").textContent = m.name ? `👤 ${m.name}` : "👤 Visiteur";
+  document.getElementById("memActivity").textContent = m.activity ? m.activity : "❓ Activité inconnue";
+  document.getElementById("memVisits").textContent = `📅 ${m.visits || 1} visite(s)`;
+  document.getElementById("userNameDisplay").textContent = m.name ? `| Bonjour ${m.name} 👋` : "";
+
+  // Panneau mémoire
+  document.getElementById("memoryGrid").innerHTML = `
+    <div class="memory-card"><label>👤 Prénom</label><span>${m.name || "Inconnu"}</span></div>
+    <div class="memory-card"><label>🏢 Activité</label><span>${m.activity || "Non précisée"}</span></div>
+    <div class="memory-card"><label>💰 Budget</label><span>${m.budget || "Non précisé"}</span></div>
+    <div class="memory-card"><label>📅 Dernière visite</label><span>${m.lastSeen || "Aujourd'hui"}</span></div>
+    <div class="memory-card"><label>🔢 Nb visites</label><span>${m.visits || 1}</span></div>
+    <div class="memory-card"><label>💬 Messages</label><span>${STATE.history.length}</span></div>
+  `;
+}
+
+function toggleMemoryPanel() {
+  const p = document.getElementById("memoryPanel");
+  p.classList.toggle("open");
+  updateMemoryUI();
+}
+
+function clearMemory() {
+  if (confirm("Effacer toute la mémoire et l'historique ?")) {
+    STATE.memory = {};
+    STATE.history = [];
+    STATE.sessionMessages = [];
+    localStorage.removeItem("wamarket_memory");
+    localStorage.removeItem("wamarket_history");
+    showToast("🗑️ Mémoire effacée");
+    updateMemoryUI();
+    document.getElementById("chatMessages").innerHTML = "";
+    initChat();
+  }
+}
+
+// ── TEXT TO SPEECH ────────────────────────────────
+function speak(text) {
+  if (!STATE.autoVoice) return;
+  stopVoice();
+
+  // Nettoyer le texte des emojis et markdown pour la voix
+  const cleanText = text
+    .replace(/[🤖💬🏨🍽️🛒📹📈✅⭐🎁🔊🎤🧠💰📞🇨🇮⚡🚀💸🟠🌊❤️👋😊💪🔥⏰👉]/gu, "")
+    .replace(/\*\*/g, "").replace(/\*/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\n/g, ". ")
+    .trim();
+
+  if (!cleanText) return;
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  utterance.lang = "fr-FR";
+  utterance.rate = 0.95;
+  utterance.pitch = 1.05;
+  utterance.volume = 1;
+
+  // Chercher une voix française
+  const voices = speechSynthesis.getVoices();
+  const frVoice = voices.find(v => v.lang.startsWith("fr") && v.name.includes("Female"))
+    || voices.find(v => v.lang.startsWith("fr"))
+    || voices[0];
+  if (frVoice) utterance.voice = frVoice;
+
+  utterance.onstart = () => {
+    STATE.isSpeaking = true;
+    document.getElementById("aiOrb").classList.add("speaking");
+    document.getElementById("aiStatusText").textContent = "🔊 Je parle...";
+    document.getElementById("aiMood").textContent = "🗣️ En train de vous répondre";
+    document.getElementById("btnStop").disabled = false;
+    startVolAnimation();
+  };
+
+  utterance.onend = () => {
+    STATE.isSpeaking = false;
+    document.getElementById("aiOrb").classList.remove("speaking");
+    document.getElementById("aiStatusText").textContent = "🟢 En ligne • Cliquez sur l'orbe pour activer la voix";
+    document.getElementById("aiMood").textContent = "😊 Prêt à vous aider";
+    document.getElementById("btnStop").disabled = true;
+    stopVolAnimation();
+  };
+
+  STATE.currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+function stopVoice() {
+  speechSynthesis.cancel();
+  STATE.isSpeaking = false;
+  document.getElementById("aiOrb").classList.remove("speaking");
+  document.getElementById("btnStop").disabled = true;
+  stopVolAnimation();
+}
+
+function toggleVoice() {
+  if (STATE.isSpeaking) {
+    stopVoice();
+  } else {
+    speak("Bonjour ! Je suis WaMarket IA, votre assistant personnel de ROGWEB SERVICE. Comment puis-je vous aider aujourd'hui ?");
+  }
+}
+
+function toggleAutoVoice() {
+  STATE.autoVoice = !STATE.autoVoice;
+  const btn = document.getElementById("btnSpeak");
+  btn.textContent = STATE.autoVoice ? "🔊 Voix Auto : ON" : "🔇 Voix Auto : OFF";
+  btn.style.opacity = STATE.autoVoice ? "1" : "0.6";
+  showToast(STATE.autoVoice ? "🔊 Voix activée !" : "🔇 Voix désactivée");
+}
+
+// ── VOLUME ANIMATION ─────────────────────────────
+function startVolAnimation() {
+  document.getElementById("volumeBar").classList.add("active");
+  STATE.volInterval = setInterval(() => {
+    for (let i = 1; i <= 7; i++) {
+      const h = Math.random() * 25 + 3;
+      document.getElementById("vb" + i).style.height = h + "px";
+    }
+  }, 120);
+}
+
+function stopVolAnimation() {
+  document.getElementById("volumeBar").classList.remove("active");
+  clearInterval(STATE.volInterval);
+}
+
+// ── RECONNAISSANCE VOCALE ─────────────────────────
+function startMicChat() {
+  if (!("webkitSpeechRecognition" in window) && !("SpeechRecognition" in window)) {
+    showToast("❌ Micro non supporté sur ce navigateur");
+    return;
+  }
+
+  if (STATE.isListening) {
+    STATE.recognition?.stop();
+    return;
+  }
+
+  stopVoice();
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  STATE.recognition = new SpeechRecognition();
+  STATE.recognition.lang = "fr-FR";
+  STATE.recognition.continuous = false;
+  STATE.recognition.interimResults = false;
+
+  STATE.recognition.onstart = () => {
+    STATE.isListening = true;
+    document.getElementById("btnMic").classList.add("recording");
+    document.getElementById("btnMic2").textContent = "⏹️ Stop Micro";
+    document.getElementById("aiOrb").classList.add("listening");
+    document.getElementById("aiStatusText").textContent = "🎤 Je vous écoute...";
+    document.getElementById("aiMood").textContent = "👂 En train d'écouter";
+    showToast("🎤 Parlez maintenant...");
+  };
+
+  STATE.recognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript;
+    document.getElementById("userInput").value = transcript;
+    showToast(`✅ "${transcript}"`);
+    setTimeout(() => sendMessage(), 500);
+  };
+
+  STATE.recognition.onerror = (e) => {
+    showToast("❌ Erreur micro : " + e.error);
+  };
+
+  STATE.recognition.onend = () => {
+    STATE.isListening = false;
+    document.getElementById("btnMic").classList.remove("recording");
+    document.getElementById("btnMic2").textContent = "🎤 Parler à l'IA";
+    document.getElementById("aiOrb").classList.remove("listening");
+    document.getElementById("aiStatusText").textContent = "🟢 En ligne";
+    document.getElementById("aiMood").textContent = "😊 Prêt à vous aider";
+  };
+
+  STATE.recognition.start();
+}
+
+// ── GEMINI API ────────────────────────────────────
+async function callGemini(userMessage) {
+  if (!STATE.apiKey) return null;
+
+  // Construire historique pour Gemini
+  const contents = [];
+
+  // Ajouter historique récent (max 10 échanges)
+  const recentHistory = STATE.history.slice(-20);
+  for (const msg of recentHistory) {
+    contents.push({ role: msg.role === "bot" ? "model" : "user", parts: [{ text: msg.content }] });
+  }
+  // Ajouter message actuel
+  contents.push({ role: "user", parts: [{ text: userMessage }] });
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${STATE.apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: contents,
+          generationConfig: {
+            temperature: 0.85,
+            maxOutputTokens: 300,
+            topP: 0.9
+          }
+        })
+      }
+    );
+
+    const data = await response.json();
+    if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+      return data.candidates[0].content.parts[0].text;
+    }
+    if (data.error) {
+      console.error("Gemini error:", data.error.message);
+      return null;
+    }
+    return null;
+  } catch (e) {
+    console.error("Gemini fetch error:", e);
+    return null;
+  }
+}
+
+// ── FALLBACK INTELLIGENT ──────────────────────────
+const FALLBACKS = {
+  greeting: () => {
+    const name = STATE.memory.name;
+    return name
+      ? `👋 Ravi de vous revoir ${name} ! Comment puis-je vous aider aujourd'hui ? 😊`
+      : "👋 Bonjour ! Je suis **WaMarket IA** 🤖\nVous avez quel type d'activité ? (boutique, hôtel, restaurant…)\nJe vous propose la solution parfaite ⚡";
+  },
+  price: () => "💰 Nos tarifs :\n• STARTER : 50 000 F\n• BUSINESS : 150 000 F ⭐\n• PREMIUM : 250 000 F\n\n🎁 Cette semaine : Installation OFFERTE !\nQuel pack vous intéresse ?",
+  hotel: () => "🏨 Pour votre hôtel :\n✅ Réservations automatiques\n✅ Réponses clients 24h/24\n💰 100K - 200K F\n\nOn prépare votre devis ? 🚀",
+  restaurant: () => "🍽️ Pour votre restaurant :\n✅ Commandes automatiques\n✅ Menu intelligent\n💰 80K - 150K F\n\nDevis gratuit en 2 min ? ⚡",
+  boutique: () => "🛒 Pour votre boutique :\n✅ Vendeur IA 24/7\n✅ Catalogue intelligent\n💰 75K - 180K F\n\nOn commence quand ? 😊",
+  camera: () => "📹 Caméra Intelligente :\n✅ Détection avancée IA\n✅ Alertes automatiques\n💰 150K - 250K F\n\nInstallation incluse ! 🔥",
+  buy: () => "🎉 Parfait ! Pour finaliser :\n📲 WhatsApp : **0170292408**\n💸 Orange Money / Wave\n⚡ Installation sous 24-48h\n\nOn vous attend ! 💪",
+  contact: () => "📞 Nos contacts :\n💬 WhatsApp 1 : 0170292408\n📱 WhatsApp 2 : 0799814557\n💸 Paiement : Orange Money / Wave\n\nRéponse en moins de 5 min ⚡",
+  default: () => {
+    const name = STATE.memory.name;
+    return `${name ? `${name}, ` : ""}bonne question 
